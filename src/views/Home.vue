@@ -27,10 +27,29 @@ export default {
     let triangle = document.getElementsByClassName('triangle')[0];
     let rectDeg = 0;
     let triangleDeg = 0;
+    let scaleValue = 0;
+    let temp = 1;
+    let s = 1;
+    function easeOutCubic(t) {
+      return --t * t * t + 1;
+    }
     let animate1 = () => {
-      rectDeg -= 1;
+      s += 0.003;
+      rectDeg = rectDeg - 1 / easeOutCubic(s);
+      triangleDeg = triangleDeg + 1 / easeOutCubic(s);
       rect.style.transform = `translate(-50%, -50%) rotate(${rectDeg}deg)`;
-      if (rectDeg > -360) requestAnimationFrame(animate1);
+      triangle.style.transform = `translate(-50%, -50%) rotate(${triangleDeg}deg)`;
+      if (triangleDeg < 180) {
+        scaleValue += 0.06;
+        circle.style.transform = `translate(-50%, -50%) scale(${1 +
+          scaleValue / 100}, ${1 + scaleValue / 100})`;
+      } else {
+        scaleValue -= 0.02;
+        circle.style.transform = `translate(-50%, -50%) scale(${1 +
+          scaleValue / 100}, ${1 + scaleValue / 100})`;
+      }
+      // console.log(rectDeg > -360 || triangle < 360);
+      if (rectDeg > -360 || triangle < 360) requestAnimationFrame(animate1);
     };
     animate1();
   }
@@ -65,8 +84,8 @@ export default {
 }
 .rect {
   @include centerItem();
-  height: 430px;
-  width: 430px;
+  height: 450px;
+  width: 450px;
   background-color: black;
 }
 .circle {
